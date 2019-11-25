@@ -1,0 +1,33 @@
+<html> 
+<style>
+    textarea {
+        resize: none;
+    }
+</style>
+
+  <head>
+  	<h1> Secp256k1 Signature Verifier </h1>
+  </head>
+
+
+
+
+  	Public key:<br>
+    <textarea id="publicTextbox" rows="2" cols="70"></textarea>
+    <br><br>
+    Message: <input type="text" id="msgTextbox" size="10"><br>
+    <br>
+    Signature: <br>
+    r: <input type="text" id="rTextbox" size="70"><br>
+    s: <input type="text"" id="sTextbox" size="70"><br>
+    <br>
+	<button id="verifyButton" onclick="verify()">Verify</button>
+	<span id="resultText"></span>
+
+	<script src="./bundle.js" charset="utf-8" >
+  	</script>
+
+  <body>
+
+  </body>  
+</html>
