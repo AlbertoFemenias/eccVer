@@ -1,6 +1,9 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (Buffer){
-
+//npm init
+//npm i browserify
+//npm install --save elliptic
+//npm run build
 
 function toByteArray(hexString) {
   var result = [];
@@ -34,10 +37,17 @@ function getUrlVars() {
 }
 
 window.onload = ()=> {
-	var getHTML = getUrlVars()["p"];
-	if (getHTML!=null){
-		document.getElementById("publicTextbox").value= getHTML;
-	}
+	var getP = getUrlVars()["p"];
+	var getM = getUrlVars()["m"];
+	var getS = getUrlVars()["s"];
+	if (getP!=null)
+		document.getElementById("publicTextbox").value= getP;
+	if (getM!=null)
+		document.getElementById("msgTextbox").value= getM;
+	if (getS!=null)
+		document.getElementById("sigTextbox").value= getS;
+	
+
 }
 
 
@@ -54,6 +64,8 @@ window.verify =function(){
 		var key = ec.keyFromPublic(pub, 'hex');
 	}
 	catch(error) {
+		document.getElementById("resultText").style.color = "red";
+		document.getElementById("resultText").innerHTML =  "Invalid public key. " + error;
 		return;
 	}
 
@@ -63,23 +75,27 @@ window.verify =function(){
 	var msgh = crypto.createHash("sha256").update(str).digest();
 	//console.log(toHexString(msgh));
 
-	var sigR = document.getElementById("rTextbox").value;
-	var sigS = document.getElementById("sTextbox").value;
-	var signature = { r: sigR, s: sigS }; // case 3
+	//var sigR = document.getElementById("rTextbox").value;
+	//var sigS = document.getElementById("sTextbox").value;
+	var signature = document.getElementById("sigTextbox").value;
 
 	// Verify signature
 	try {
 	  	var result = key.verify(msgh, signature);
 	}
 	catch(error) {
+		document.getElementById("resultText").style.color = "red";
+		document.getElementById("resultText").innerHTML =  "Failure validating signature. " + error;
 		return;
 	}
 
 	//console.log(result);
 	if (result){
+		document.getElementById("resultText").style.color = "green";
 		document.getElementById("resultText").innerHTML = "Signature is correct :)";
 	}else{
-		document.getElementById("resultText").innerHTML = "Invalid signature!!!";
+		document.getElementById("resultText").style.color = "blue";
+		document.getElementById("resultText").innerHTML = "The public key does not verify this signature!!!";
 	}
 
 }
